@@ -1,5 +1,8 @@
-from turtle import Turtle, Screen
+from turtle import Screen
+
+from scoreboard import Scoreboard
 from snake import Snake
+from food import Food
 import time
 
 screen = Screen()
@@ -8,8 +11,12 @@ screen.bgcolor("black")
 screen.title("My Snake Game!")
 screen.tracer(0)
 
-snake = Snake()
+right_boarder = (300, 0)
+left_boarder = (0, -300)
 
+snake = Snake()
+food = Food()
+scoreboard = Scoreboard()
 
 screen.listen()
 screen.onkey(snake.up, "Up")
@@ -17,46 +24,30 @@ screen.onkey(snake.down, "Down")
 screen.onkey(snake.left, "Left")
 screen.onkey(snake.right, "Right")
 
-
-
-
-
-
 game_is_on = True
-
-
-
-
 
 while game_is_on:
     screen.update()
     time.sleep(0.1)
-
     snake.move()
 
+    if snake.head.distance(food) < 15:
+        scoreboard.update()
+        food.refresh()
+        snake.growing()
 
-
-
-
-#
-#
-#
-#
-# snake.shape("square")
-# snake.color("white")
-# snake.shapesize(stretch_wid=None, stretch_len=3, outline=None)
-# snake.penup()
-# snake.goto(x=-20, y=0)
-# game_is_on = True
-#
-# while game_is_on:
-#     screen.listen()
-#     screen.onkey(key="w", fun=move_forward)
-#     screen.onkey(key="s", fun=move_backward)
-#     screen.onkey(key="a", fun=move_counter_clockwise)
-#     screen.onkey(key="d", fun=move_clockwise)
-#     snake.forward(5)
-
+    if snake.head.xcor() > 280:
+        game_is_on = False
+        scoreboard.game_over()
+    elif snake.head.ycor() > 300:
+        game_is_on = False
+        scoreboard.game_over()
+    elif snake.head.ycor() < -290:
+        game_is_on = False
+        scoreboard.game_over()
+    elif snake.head.xcor() < -300:
+        game_is_on = False
+        scoreboard.game_over()
 
 
 
